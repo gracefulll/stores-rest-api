@@ -30,10 +30,6 @@ app.secret_key = 'jose'
 api = Api(app)
 
 
-# let SQLAlchemy create all the tables for us
-@app.before_first_request
-def create_tables():
-    db.create_all()
 
 
 jwt = JWT(app, authenticate, identity)
