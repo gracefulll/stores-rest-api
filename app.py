@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 from flask_restful import Api
 from flask_jwt import JWT
@@ -24,7 +26,12 @@ from resources.store import Store, StoreList
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'  # tell SQLAlchemy where to find data.db
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'  # tell SQLAlchemy where to find data.db
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///data.db')
+# use Heroku's postgres. 'DATABASE_URL' is provided by Heroku->Settings->Config Vars
+# but we still want to test locally - so providing sqlite:/// as the fallback default value to get()
+
 app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False    # turn off flask's SQLAlchemy tracker in order to use SQLAlchemy's own tracker instead
 app.secret_key = 'jose'
 api = Api(app)
